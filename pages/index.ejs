@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - Ricettario</title>
+    <%- include("partials/head") %>
+</head>
+<body>
+    <%- include("partials/header") %>
+    <table>
+        <thead><tr>
+            <td>Nome</td>
+            <td>Tipo</td>
+        </tr></thead>
+        <tbody>
+            <% list.forEach((item) => { %>
+                <tr class="item">
+                <td class="name">
+                    <a href="<%= 'items/' + item.id %>"><%= item.name %></a>
+                </td>
+                <td class="type">
+                    <%= item.type %>
+                </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

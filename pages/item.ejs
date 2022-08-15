@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= item.name %> - Ricettario</title>
+    <%- include("partials/head") %>
+</head>
+<body>
+    <%- include("partials/header") %>
+    <h1><%= item.name %></h1>
+    <table><tbody>
+        <tr>
+            <td>Tipo:</td>
+            <td><%= item.type %></td>
+        </tr>
+        <tr>
+            <td>Difficoltà:</td>
+            <td><%= item.difficulty + "/5"%></td>
+        </tr>
+        <tr>
+            <td>Dosi per:</td>
+            <td><%= item.doses_for + " persone" %></td>
+        </tr>
+    </tbody></table>
+    <div id="ingredients">
+        <h2>Ingredienti:</h2>
+        <ul>
+            <% item.ingredients.forEach((el) => { %>
+                <li><%= el.name + " (" + el.amount + ")" %></li>
+            <% }); %>
+        </ul>
+    </div>
+    <div id="procedimento">
+        <h2>Procedimento:</h2>
+        <p><%= item.procedure %></p>
+    </div>
+</body>
+</html>

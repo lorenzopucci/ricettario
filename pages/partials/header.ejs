@@ -1,0 +1,28 @@
+<header>
+<nav class="flexbox">
+    <span id="home-btn">
+        <a href="/">Home</a>
+    </span>
+    <span id="search">
+        <form action="/search" method="GET">
+        <input id="searchbar" type="text" placeholder="Cerca">
+        <button type="submit" id="search-btn">Invia</button>
+        </form>
+    </span>
+    <span id="add">
+        <a href="/add">Aggiungi ricetta</a>
+    </span>
+</nav>
+</header>
+<style>
+    .flexbox {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        align-items: center;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-bottom: 50px;
+        padding: 8px 5% 8px 5%;
+    }
+</style>

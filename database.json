@@ -1,0 +1,43 @@
+[
+    {
+        "id": 0,
+        "name": "Pasta al pesto",
+        "type": "Primo",
+        "difficulty": 3,
+        "doses_for": 4,
+        "ingredients": [
+            {"name": "Pasta", "amount": "1kg"},
+            {"name": "Sale", "amount": "200g"},
+            {"name": "Pesto", "amount": "1 barattolo"}
+        ],
+        "procedure": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    },
+    {
+        "id": 1,
+        "name": "Crostata",
+        "type": "Dolce",
+        "difficulty": 5,
+        "doses_for": 4,
+        "ingredients": [
+            {"name": "Farina", "amount": "200g"},
+            {"name": "Uova", "amount": "2"},
+            {"name": "Zucchero", "amount": "100g"},
+            {"name": "Marmellata", "amount": "1 barattolo"}
+        ],
+        "procedure": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    },
+    {
+        "id": 2,
+        "name": "Carbonara",
+        "type": "Primo",
+        "difficulty": 3,
+        "doses_for": 2,
+        "ingredients": [
+            {"name": "Spaghetti", "amount": "300g"},
+            {"name": "Pancetta", "amount": "100g"},
+            {"name": "Uova", "amount": "2"},
+            {"name": "Pecorino romano", "amount": "50g"}
+        ],
+        "procedure": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    }
+]
