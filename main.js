@@ -37,6 +37,32 @@ app.get('/items/*', (req, res) => {
     });
 });
 
+app.get('/search', (req, res) => {
+    const data = require("./database.json");
+    let list = [];
+
+    data.forEach((item) => {
+        let skip = false;
+        let name = item.name.toLowerCase();
+
+        req.query.q.split(" ").forEach((query) => {
+            if (!name.split(" ").includes(query.toLowerCase())) {
+                skip = true;
+            }
+        });
+
+        if (!skip) {
+            list.push({
+                id: item.id,
+                name: item.name,
+                type: item.type
+            });
+        }
+    });
+
+    res.render(__dirname + "/pages/index.ejs", {list});
+});
+
 app.get('/static/*', (req, res) => {
     res.sendFile(__dirname + req.url);
 });

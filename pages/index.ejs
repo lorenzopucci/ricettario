@@ -12,6 +12,9 @@
             <td>Tipo</td>
         </tr></thead>
         <tbody>
+            <% if(list.length < 1) { %>
+                <tr class="empty"><td>Non ci sono risultati</td></tr>
+            <% } else { %>
             <% list.forEach((item) => { %>
                 <tr class="item">
                 <td class="name">
@@ -22,7 +25,15 @@
                 </td>
                 </tr>
             <% }); %>
+            <% } %>
         </tbody>
     </table>
+    <style>
+        .empty > td {
+            font-size: 24px;
+            font-weight: bold;
+            padding-top: 15px;
+        }
+    </style>
 </body>
 </html>
