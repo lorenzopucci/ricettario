@@ -16,7 +16,7 @@ server.listen(8000, () => {
 });
 
 app.get('/', (req, res) => {
-    const data = require("./database.json");
+    const data = require(__dirname + "./database.json");
     let list = [];
 
     data.forEach((item) => {
@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/items/*', (req, res) => {
-    const data = require("./database.json");
+    const data = require(__dirname + "./database.json");
 
     data.forEach((item) => {
         if (item.id == req.url.split("/")[2]) {
@@ -42,7 +42,7 @@ app.get('/items/*', (req, res) => {
 });
 
 app.get('/search', (req, res) => {
-    const data = require("./database.json");
+    const data = require(__dirname + "./database.json");
     let list = [];
 
     data.forEach((item) => {
@@ -72,7 +72,7 @@ app.get('/add', (req, res) => {
 });
 
 app.post('/add/commit', (req, res) => {
-    let data = require("./database.json");
+    let data = require(__dirname + "/database.json");
     let ingredients = [];
 
     for (let key in req.body) {
@@ -97,8 +97,10 @@ app.post('/add/commit', (req, res) => {
 
     fs.writeFile(__dirname + "/database.json", 'UTF-8', JSON.stringify(data),
         (err) => {
-        console.log("Error in writing JSON to database");
-        console.log(err);
+        if (err) {
+            console.log("Error in writing JSON to database");
+            console.log(err);
+        }
     });
     
     res.redirect('/');
