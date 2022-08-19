@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - Ricettario</title>
+    <%- include("partials/head") %>
+</head>
+<body>
+    <%- include("partials/header") %>
+    <form action="/add/commit" method="POST" id="add-form">
+        <div id="first_line-container">
+            <input type="text" name="name" id="input-name" placeholder="Nome">
+            <select name="type" id="input-type">
+                <option value="Primo">Primo</option>
+                <option value="Secondo">Secondo</option>
+                <option value="Contorno">Contorno</option>
+                <option value="Dolce">Dolce</option>
+                <option value="Altro">Altro</option>
+            </select>
+        </div>
+        <div id="difficulty-container">
+            <label for="input-difficulty">Difficoltà:</label>
+            <input type="range" min="1" max="5" value="3" name="difficulty"
+                class="slider" id="input-difficulty">
+            <span id="difficulty-label">3</span>
+        </div>
+        <div id="doses_for-container">
+            <label for="input-doses_for">Dosi per:</label>
+            <input type="range" min="1" max="8" value="2" name="doses_for"
+                class="slider" id="input-doses_for">
+            <span id="doses_for-label">2</span>
+        </div>
+        <div id="ingredients-container">
+            <div>Ingredienti:</div>
+        </div>
+        <div id="procedure-container">
+            <textarea name="procedure" id="input-procedure" rows="10"
+                placeholder="Procedimento"></textarea>
+        </div>
+        <button type="submit">Aggiungi</button>
+    </form>
+    <script>
+        ["difficulty", "doses_for"].forEach((el) => {
+            var input = document.getElementById("input-" + el);
+            input.addEventListener('input', (event) => {
+                document.getElementById(el + "-label").innerHTML = input.value;
+            });
+        });
+        
+        var ingrCounter = 1;
+        function newIngredient() {
+            var ingr = document.createElement("div");
+
+            ingr.innerHTML = '<input type="text" name="ingr-' + ingrCounter +
+            '-name" id="ingr' + ingrCounter + '-name" placeholder="Nome">' +
+            '<input type="text" name="ingr-' + ingrCounter + '-amount" ' +
+            ' id="ingr' + ingrCounter + '-amount" placeholder="Quantità"' +
+            'style="width: 15%;">';
+
+            document.getElementById("ingredients-container").appendChild(ingr);
+
+            var input = document.getElementById("ingr" + ingrCounter + "-name");
+            input.addEventListener('input', newIngredient);
+
+            if (ingrCounter > 1) {
+                var prev = document.getElementById("ingr" + (ingrCounter - 1) +
+                    "-name");
+                prev.removeEventListener('input', newIngredient);
+            }
+
+            ingrCounter++;
+        }
+        newIngredient();
+    </script>
+    <style>
+        #add-form > * {
+            margin-top: 20px;
+        }
+        #ingredients-container > div {
+            margin-top: 10px;
+        }
+        #ingredients-container > div > * {
+            margin-right: 8px;
+        }
+        textarea {
+            width: 100%;
+        }
+    </style>
+</body>
+</html>
