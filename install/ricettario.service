@@ -1,0 +1,8 @@
+[Unit]
+Description=A self-hosted web database of family recipes
+
+[Service]
+ExecStart=/usr/local/lib/ricettario/run.sh
+
+[Install]
+WantedBy=multi-user.target
