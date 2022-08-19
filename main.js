@@ -16,12 +16,12 @@ server.listen(8000, () => {
 });
 
 app.get('/', (req, res) => {
-    const data = require(__dirname + "./database.json");
+    const data = require(__dirname + "/database.json");
     let list = [];
 
     data.forEach((item) => {
         list.push({
-            id: item.id,
+            id: data.indexOf(item),
             name: item.name,
             type: item.type
         });
@@ -31,18 +31,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/items/*', (req, res) => {
-    const data = require(__dirname + "./database.json");
+    const data = require(__dirname + "/database.json");
 
-    data.forEach((item) => {
-        if (item.id == req.url.split("/")[2]) {
-            res.render(__dirname + "/pages/item.ejs", {item});
-            return;
-        }
-    });
+    const item = data[req.url.split("/")[2]];
+    res.render(__dirname + "/pages/item.ejs", {item});
 });
 
 app.get('/search', (req, res) => {
-    const data = require(__dirname + "./database.json");
+    const data = require(__dirname + "/database.json");
     let list = [];
 
     data.forEach((item) => {
@@ -57,7 +53,7 @@ app.get('/search', (req, res) => {
 
         if (!skip) {
             list.push({
-                id: item.id,
+                id: data.indexOf(item),
                 name: item.name,
                 type: item.type
             });
@@ -86,7 +82,6 @@ app.post('/add/commit', (req, res) => {
     }
 
     data.push({
-        id: data[data.length - 1].id + 1,
         name: req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1),
         type: req.body.type,
         difficulty: parseInt(req.body.difficulty),
