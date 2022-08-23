@@ -32,3 +32,7 @@ tbody > tr:nth-child(odd):not(.empty) {
 p {
     text-align: justify;
 }
+input[type=text] {
+    max-width: 60%;
+    min-width: 20%;
+}
