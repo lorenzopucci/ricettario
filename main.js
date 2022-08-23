@@ -24,6 +24,41 @@ function overwriteDatabase(data) {
     });
 }
 
+function popFromDatabase(index) {
+    let data = require(__dirname + "/database.json");
+    data.splice(index, 1);
+
+    overwriteDatabase(data);
+}
+
+function appendToDatabase(req, res) {
+    let data = require(__dirname + "/database.json");
+    let ingredients = [];
+
+    for (let key in req.body) {
+        if (key.startsWith("ingr-") && key.endsWith("-name") &&
+            req.body[key] !== "") {
+            ingredients.push({
+                name: req.body[key],
+                amount: req.body["ingr-" + key.split("-")[1] + "-amount"]
+            });
+        }
+    }
+
+    data.push({
+        name: req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1),
+        type: req.body.type,
+        difficulty: parseInt(req.body.difficulty),
+        doses_for: parseInt(req.body.doses_for),
+        ingredients: ingredients,
+        procedure: req.body.procedure
+    });
+
+    overwriteDatabase(data);
+    
+    res.redirect('/');
+}
+
 app.get('/', (req, res) => {
     const data = require(__dirname + "/database.json");
     let list = [];
@@ -74,43 +109,26 @@ app.get('/search', (req, res) => {
 });
 
 app.get('/add', (req, res) => {
-    res.render(__dirname + "/pages/add.ejs");
+    res.render(__dirname + "/pages/add.ejs", {item: undefined});
 });
 
-app.post('/add/commit', (req, res) => {
-    let data = require(__dirname + "/database.json");
-    let ingredients = [];
+app.post('/add/commit', appendToDatabase);
 
-    for (let key in req.body) {
-        if (key.startsWith("ingr-") && key.endsWith("-name") &&
-            req.body[key] !== "") {
-            ingredients.push({
-                name: req.body[key],
-                amount: req.body["ingr-" + key.split("-")[1] + "-amount"]
-            });
-        }
-    }
+app.post('/edit/commit/*', (req, res) => {
+    popFromDatabase(req.url.split("/")[3]);
+    appendToDatabase(req, res);
+});
 
-    data.push({
-        name: req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1),
-        type: req.body.type,
-        difficulty: parseInt(req.body.difficulty),
-        doses_for: parseInt(req.body.doses_for),
-        ingredients: ingredients,
-        procedure: req.body.procedure
-    });
+app.get('/edit/*', (req, res) => {
+    const data = require(__dirname + "/database.json");
+    const id = req.url.split("/")[2];
+    const item = data[id];
 
-    overwriteDatabase(data);
-    
-    res.redirect('/');
+    res.render(__dirname + "/pages/add.ejs", {item, id});
 });
 
 app.get('/delete/commit/*', (req, res) => {
-    let data = require(__dirname + "/database.json");
-    data.splice(req.url.split("/")[3], 1);
-
-    overwriteDatabase(data);
-
+    popFromDatabase(req.url.split("/")[3]);
     res.redirect("/");
 });
 

@@ -6,47 +6,72 @@
 </head>
 <body>
     <%- include("partials/header") %>
-    <form action="/add/commit" method="POST" id="add-form">
+    <form action="<%= (item) ? ('/edit/commit/' + id) : '/add/commit' %>"
+        method="POST" id="add-form">
         <div id="first_line-container">
-            <input type="text" name="name" id="input-name" placeholder="Nome">
+            <input type="text" name="name" id="input-name" placeholder="Nome"
+            value="<%= (item) ? item.name : '' %>">
             <select name="type" id="input-type">
-                <option value="Primo">Primo</option>
-                <option value="Secondo">Secondo</option>
-                <option value="Contorno">Contorno</option>
-                <option value="Dolce">Dolce</option>
-                <option value="Altro">Altro</option>
+                <% ['Primo', 'Secondo', 'Contorno', 'Dolce', 'Altro']
+                    .forEach((el) => { %>
+                <option value="<%= el %>"
+                    <%= (item && item.type == el) ? "selected" : "" %>>
+                    <%= el %></option>
+                <% }); %>
             </select>
         </div>
         <div id="difficulty-container">
             <label for="input-difficulty">Difficoltà:</label>
-            <input type="range" min="1" max="5" value="3" name="difficulty"
+            <input type="range" min="1" max="5"
+                value="<%= (item) ? item.difficulty : 3%>" name="difficulty"
                 class="slider" id="input-difficulty">
-            <span id="difficulty-label">3</span>
+            <span id="difficulty-label"></span>
         </div>
         <div id="doses_for-container">
             <label for="input-doses_for">Dosi per:</label>
-            <input type="range" min="1" max="8" value="2" name="doses_for"
+            <input type="range" min="1" max="8"
+                value="<%= (item) ? item.doses_for: 2%>" name="doses_for"
                 class="slider" id="input-doses_for">
-            <span id="doses_for-label">2</span>
+            <span id="doses_for-label"></span>
         </div>
         <div id="ingredients-container">
             <div>Ingredienti:</div>
+            <% if (item) { %>
+            <% for (var i = 0; i < item.ingredients.length; i++) { %>
+            <% const el = item.ingredients[i]; %>
+                <div>
+                <input type="text" name="ingr-<%= i %>-name"
+                    id="ingr<%= i%>-name" placeholder="Nome"
+                    value="<%= el.name %>">
+                <input type="text" name="ingr-<%= i %>-amount"
+                    id="ingr<%= i %>-amount" placeholder="Quantità"
+                    style="width: 15%;" value="<%= el.amount %>">
+                </div>
+            <% } %>
+            <% } %>
         </div>
         <div id="procedure-container">
-            <textarea name="procedure" id="input-procedure" rows="10"
-                placeholder="Procedimento"></textarea>
+            <textarea name="procedure" id="input-procedure" rows="8"
+                placeholder="Procedimento"><%= (item) ? item.procedure :
+                "" %></textarea>
         </div>
-        <button type="submit">Aggiungi</button>
+        <button type="submit"><%= (item) ? "Modifica" : "Aggiungi" %></button>
     </form>
+
     <script>
         ["difficulty", "doses_for"].forEach((el) => {
             var input = document.getElementById("input-" + el);
             input.addEventListener('input', (event) => {
                 document.getElementById(el + "-label").innerHTML = input.value;
             });
+            document.getElementById(el + "-label").innerHTML = input.value;
         });
         
-        var ingrCounter = 1;
+        const startingVal = 
+            document.getElementById("ingredients-container").children.length -1;
+        var ingrCounter = startingVal;
+            
+
         function newIngredient() {
             var ingr = document.createElement("div");
 
@@ -61,7 +86,7 @@
             var input = document.getElementById("ingr" + ingrCounter + "-name");
             input.addEventListener('input', newIngredient);
 
-            if (ingrCounter > 1) {
+            if (ingrCounter > startingVal) {
                 var prev = document.getElementById("ingr" + (ingrCounter - 1) +
                     "-name");
                 prev.removeEventListener('input', newIngredient);
