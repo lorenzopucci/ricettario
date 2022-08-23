@@ -15,6 +15,15 @@ server.listen(8000, () => {
   console.log("Server listening at port 8000");
 });
 
+function overwriteDatabase(data) {
+    fs.writeFile(__dirname + "/database.json", JSON.stringify(data), (err) => {
+        if (err) {
+            console.log("Error in writing JSON to database");
+            console.log(err);
+        }
+    });
+}
+
 app.get('/', (req, res) => {
     const data = require(__dirname + "/database.json");
     let list = [];
@@ -33,8 +42,9 @@ app.get('/', (req, res) => {
 app.get('/items/*', (req, res) => {
     const data = require(__dirname + "/database.json");
 
-    const item = data[req.url.split("/")[2]];
-    res.render(__dirname + "/pages/item.ejs", {item});
+    const index = req.url.split("/")[2];
+    const item = data[index];
+    res.render(__dirname + "/pages/item.ejs", {item, id: index});
 });
 
 app.get('/search', (req, res) => {
@@ -90,15 +100,27 @@ app.post('/add/commit', (req, res) => {
         procedure: req.body.procedure
     });
 
-    fs.writeFile(__dirname + "/database.json", 'UTF-8', JSON.stringify(data),
-        (err) => {
-        if (err) {
-            console.log("Error in writing JSON to database");
-            console.log(err);
-        }
-    });
+    overwriteDatabase(data);
     
     res.redirect('/');
+});
+
+app.get('/delete/commit/*', (req, res) => {
+    let data = require(__dirname + "/database.json");
+    data.splice(req.url.split("/")[3], 1);
+
+    overwriteDatabase(data);
+
+    res.redirect("/");
+});
+
+app.get('/delete/*', (req, res) => {
+    // this function only renders the confirmation page
+    const data = require(__dirname + "/database.json");
+    const id = req.url.split("/")[2];
+    const name = data[id].name;
+
+    res.render(__dirname + "/pages/delete.ejs", {id, name});
 });
 
 app.get('/static/*', (req, res) => {

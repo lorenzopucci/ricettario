@@ -33,5 +33,10 @@
         <h2>Procedimento:</h2>
         <p><%= item.procedure %></p>
     </div>
+    <div id="actions">
+        <a href="<%= '/edit/' + id %>"><button>Modifica</button></a>
+        <a href="<%= '/delete/' + id %>"><button class="red">Elimina
+        </button></a>
+    </div>
 </body>
 </html>

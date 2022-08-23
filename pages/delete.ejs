@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elimina <%= name %> - Ricettario</title>
+    <%- include("partials/head") %>
+</head>
+<body>
+    <p>Stai per cancellare la ricetta "<strong><%= name %></strong>".
+    Sei sicuro?</p>
+    <a href="<%= '/items/' + id %>"><button>Annulla</button></a>
+    <a href="<%= '/delete/commit/' + id %>"><button class="red">Elimina
+    </button></a>
+</body>
+</html>
