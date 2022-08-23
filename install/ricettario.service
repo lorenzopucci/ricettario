@@ -2,7 +2,7 @@
 Description=A self-hosted web database of family recipes
 
 [Service]
-ExecStart=/usr/local/lib/ricettario/run.sh
+ExecStart=/usr/local/bin/ricettario
 
 [Install]
 WantedBy=multi-user.target

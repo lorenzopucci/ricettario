@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "Starting ricettario..."
-node main.js
+node /usr/local/lib/ricettario/main.js

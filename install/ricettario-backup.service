@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup daemon for ricettario
+
+[Service]
+ExecStart=/usr/local/bin/ricettario-backup.sh
+WorkingDirectory=/usr/local/lib/ricettario
+
+[Install]
+WantedBy=multi-user.target
