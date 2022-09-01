@@ -36,3 +36,19 @@ input[type=text] {
     max-width: 60%;
     min-width: 20%;
 }
+button {
+    border: 1px solid #333333;
+    background-color: white;
+    border-radius: 6px;
+}
+button:hover {
+    background-color: #303030;
+    color: white;
+}
+button.red {
+    color: rgb(255, 23, 23);
+}
+button.red:hover {
+    background-color: rgb(255, 23, 23);
+    color: white;
+}
