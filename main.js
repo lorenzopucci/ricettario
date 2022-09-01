@@ -88,10 +88,10 @@ app.get('/search', (req, res) => {
 
     data.forEach((item) => {
         let skip = false;
-        let name = item.name.toLowerCase();
 
         req.query.q.split(" ").forEach((query) => {
-            if (!name.split(" ").includes(query.toLowerCase())) {
+            if (!( item.name.toLowerCase().includes(query.toLowerCase()) ||
+                item.type.toLowerCase().includes(query.toLowerCase()) )) {
                 skip = true;
             }
         });
