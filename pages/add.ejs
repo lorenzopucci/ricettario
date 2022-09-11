@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- File used for both item addition and editing -->
 <html>
 <head>
     <title>Home - Ricettario</title>
@@ -7,10 +8,11 @@
 <body>
     <%- include("partials/header") %>
     <form action="<%= (item) ? ('/edit/commit/' + id) : '/add/commit' %>"
-        method="POST" id="add-form">
+        method="POST" id="add-form" enctype="multipart/form-data">
+
         <div id="first_line-container">
             <input type="text" name="name" id="input-name" placeholder="Nome"
-            value="<%= (item) ? item.name : '' %>">
+            value="<%= (item) ? item.name : '' %>" required>
             <select name="type" id="input-type">
                 <% ['Primo', 'Secondo', 'Contorno', 'Dolce', 'Altro']
                     .forEach((el) => { %>
@@ -20,6 +22,14 @@
                 <% }); %>
             </select>
         </div>
+
+        <% if((!item) || !("image" in item) || item.image === "") { %>
+        <div id="image-container">
+            <label for="file-picker">Immagine:</label>
+            <input id="file-picker" type="file" name="img" accept="image/*">
+        </div>
+        <% } %>
+
         <div id="difficulty-container">
             <label for="input-difficulty">Difficoltà:</label>
             <input type="range" min="1" max="5"
@@ -27,6 +37,7 @@
                 class="slider" id="input-difficulty">
             <span id="difficulty-label"></span>
         </div>
+
         <div id="doses_for-container">
             <label for="input-doses_for">Dosi per:</label>
             <input type="range" min="1" max="8"
@@ -34,6 +45,7 @@
                 class="slider" id="input-doses_for">
             <span id="doses_for-label"></span>
         </div>
+
         <div id="ingredients-container">
             <div>Ingredienti:</div>
             <% if (item) { %>
@@ -50,11 +62,13 @@
             <% } %>
             <% } %>
         </div>
+
         <div id="procedure-container">
             <textarea name="procedure" id="input-procedure" rows="8"
-                placeholder="Procedimento"><%= (item) ? item.procedure :
-                "" %></textarea>
+                placeholder="Procedimento" required><%= (item) ? item.procedure
+                : "" %></textarea>
         </div>
+        
         <button type="submit"><%= (item) ? "Modifica" : "Aggiungi" %></button>
     </form>
 

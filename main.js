@@ -1,14 +1,12 @@
-var express = require("express");
-var http = require("http");
-var bodyParser = require("body-parser");
-var fs = require("fs");
-//var favicon = require("serve-favicon");
+let express = require("express");
+let http = require("http");
+let fs = require("fs");
+let formidable = require("formidable");
+//let favicon = require("serve-favicon");
 
-var app = express();
-var server = http.createServer(app);
+let app = express();
+let server = http.createServer(app);
 //app.use(favicon(__dirname + '/static/images/favicon.ico'));
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
 app.set('view engine', 'ejs');
 
 server.listen(8000, () => {
@@ -24,39 +22,65 @@ function overwriteDatabase(data) {
     });
 }
 
-function popFromDatabase(index) {
+function popFromDatabase(index, deleteImage = false) {
     let data = require(__dirname + "/database.json");
+
+    if (deleteImage && data[index].image !== "") {
+        fs.unlinkSync(__dirname + "/static/img/" + data[index].image);
+    }
+
     data.splice(index, 1);
 
     overwriteDatabase(data);
 }
 
-function appendToDatabase(req, res) {
-    let data = require(__dirname + "/database.json");
-    let ingredients = [];
+function appendToDatabase(req, uploadImg = false, currentImg = "") {
+    const formidableForm = new formidable.IncomingForm();
+    const data = require(__dirname + "/database.json");
+    const uploadPath = __dirname + "/static/img";
+    formidableForm.uploadDir = uploadPath;
 
-    for (let key in req.body) {
-        if (key.startsWith("ingr-") && key.endsWith("-name") &&
-            req.body[key] !== "") {
-            ingredients.push({
-                name: req.body[key],
-                amount: req.body["ingr-" + key.split("-")[1] + "-amount"]
-            });
+    formidableForm.parse(req, (err, fields, files) => {
+        if (err) {
+            console.log("Error in file upload");
+            console.log(err);
         }
-    }
 
-    data.push({
-        name: req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1),
-        type: req.body.type,
-        difficulty: parseInt(req.body.difficulty),
-        doses_for: parseInt(req.body.doses_for),
-        ingredients: ingredients,
-        procedure: req.body.procedure
+        if (uploadImg && files.img.originalFilename !== "") {
+            const file = files.img;
+            try {
+                fs.renameSync(file.filepath, uploadPath +"/"+ file.newFilename);
+                currentImg = file.newFilename;
+            } catch (err) {
+                console.log("Error in image upload");
+                console.log(err);
+            }
+        }
+
+        let ingredients = [];
+        for (let key in fields) {
+            if (key.startsWith("ingr-") && key.endsWith("-name") &&
+                fields[key] !== "") {
+
+                ingredients.push({
+                    name: fields[key],
+                    amount: fields["ingr-" + key.split("-")[1] + "-amount"]
+                });
+            }
+        }
+
+        data.push({
+            name: fields.name,
+            type: fields.type,
+            difficulty: fields.difficulty,
+            doses_for: fields.doses_for,
+            image: currentImg,
+            ingredients: ingredients,
+            procedure: fields.procedure,
+        });
+
+        overwriteDatabase(data);
     });
-
-    overwriteDatabase(data);
-    
-    res.redirect('/');
 }
 
 app.get('/', (req, res) => {
@@ -112,11 +136,19 @@ app.get('/add', (req, res) => {
     res.render(__dirname + "/pages/add.ejs", {item: undefined});
 });
 
-app.post('/add/commit', appendToDatabase);
+app.post('/add/commit', (req, res) => {
+    appendToDatabase(req, true);
+    res.redirect("/");
+});
 
 app.post('/edit/commit/*', (req, res) => {
-    popFromDatabase(req.url.split("/")[3]);
-    appendToDatabase(req, res);
+    const data = require(__dirname + "/database.json");
+    const index = req.url.split("/")[3];
+    const currImg = ("image" in data[index]) ? data[index].image : "";
+
+    popFromDatabase(index, false);
+    appendToDatabase(req, currImg == "", currImg);
+    res.redirect("/");
 });
 
 app.get('/edit/*', (req, res) => {
@@ -128,7 +160,8 @@ app.get('/edit/*', (req, res) => {
 });
 
 app.get('/delete/commit/*', (req, res) => {
-    popFromDatabase(req.url.split("/")[3]);
+    const index = req.url.split("/")[3];
+    popFromDatabase(index, true);
     res.redirect("/");
 });
 

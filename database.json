@@ -4,6 +4,7 @@
         "type": "Primo",
         "difficulty": 3,
         "doses_for": 4,
+        "image": "pasta_pesto.jpg",
         "ingredients": [
             {"name": "Pasta", "amount": "1kg"},
             {"name": "Sale", "amount": "200g"},
@@ -16,6 +17,7 @@
         "type": "Dolce",
         "difficulty": 5,
         "doses_for": 4,
+        "image": "crostata.jpg",
         "ingredients": [
             {"name": "Farina", "amount": "200g"},
             {"name": "Uova", "amount": "2"},
@@ -29,6 +31,7 @@
         "type": "Primo",
         "difficulty": 3,
         "doses_for": 2,
+        "image": "carbonara.jpg",
         "ingredients": [
             {"name": "Spaghetti", "amount": "300g"},
             {"name": "Pancetta", "amount": "100g"},
