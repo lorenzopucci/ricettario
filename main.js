@@ -2,11 +2,11 @@ let express = require("express");
 let http = require("http");
 let fs = require("fs");
 let formidable = require("formidable");
-//let favicon = require("serve-favicon");
+let favicon = require("serve-favicon");
 
 let app = express();
 let server = http.createServer(app);
-//app.use(favicon(__dirname + '/static/images/favicon.ico'));
+app.use(favicon(__dirname + '/static/favicon.ico'));
 app.set('view engine', 'ejs');
 
 server.listen(8000, () => {
@@ -70,10 +70,10 @@ function appendToDatabase(req, uploadImg = false, currentImg = "") {
         }
 
         data.push({
-            name: fields.name,
+            name: fields.name.charAt(0).toUpperCase() + fields.name.slice(1),
             type: fields.type,
-            difficulty: fields.difficulty,
-            doses_for: fields.doses_for,
+            difficulty: parseInt(fields.difficulty),
+            doses_for: parseInt(fields.doses_for),
             image: currentImg,
             ingredients: ingredients,
             procedure: fields.procedure,
@@ -172,6 +172,10 @@ app.get('/delete/*', (req, res) => {
     const name = data[id].name;
 
     res.render(__dirname + "/pages/delete.ejs", {id, name});
+});
+
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(__dirname + "/static/favicon.ico");
 });
 
 app.get('/static/*', (req, res) => {
