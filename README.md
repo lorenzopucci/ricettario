@@ -7,7 +7,7 @@ server. The file you can find here is only an example.
 
 # Usage
 After cloning the repo and moving to the right folder, install the necessary
-dependencies:
+dependencies (make sure your node version is $>=18$):
 ```sh
 npm install
 ```
